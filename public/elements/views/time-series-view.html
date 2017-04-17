@@ -1,0 +1,40 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/px-card/px-card.html"/>
+<link rel="import" href="../../bower_components/px-view-header/px-view-header.html">
+<link rel="import" href="../../bower_components/px-simple-line-chart/px-simple-line-chart.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+
+
+<script type="text/javascript" src="../../bower_components/px/dist/px.min.js"></script>
+
+<dom-module id="time-series-view">
+  <template>
+    <px-view-header title="Time Series" style="display: block; margin-bottom: 6px;"></px-view-header>
+        
+    <px-card header-text='Time Series' icon="fa-line-chart">
+
+      <!--<iron-ajax id="ajax" url="/api/msu/timeseries" on-response="_onResponse" last-response="{{_simpleDataValuesB}}"
+        auto>
+      </iron-ajax>
+      <iron-ajax id="ajax2" url="/api/msu/timeseries/sum" on-response="_onResponse2" last-response="{{_sum}}"
+        auto>
+      </iron-ajax>-->
+
+      <px-simple-line-chart line-data="[[_simpleDataValuesB.data.values]]" width="auto" max="10" min="0" threshold="5">
+      </px-simple-line-chart>
+
+    </px-card>
+    <!--<px-gauge value="10"> </px-gauge>-->
+    <!--<px-gauge value="50"> </px-gauge>-->
+
+  </template>
+  <script>
+    Polymer({
+      is: 'time-series-view',
+      properties: {},
+      ready: function() {
+        console.log('time-series-view ready()')
+      }
+    });
+  </script>
+</dom-module>

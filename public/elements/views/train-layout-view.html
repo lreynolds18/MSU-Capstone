@@ -1,0 +1,45 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/px-card/px-card.html"/>
+<link rel="import" href="../../bower_components/px-view-header/px-view-header.html">
+<link rel="import" href="../../bower_components/px-widget-cards/px-twoup.html">
+<link rel="import" href="../../bower_components/px-widget-cards/px-threeup.html">
+<link rel="import" href="../../bower_components/px-gauge/px-gauge.html"/>
+
+<dom-module id="train-layout-view">
+  <template>
+    <px-view-header title="Train Layout" style="display: block; margin-bottom: 6px;"></px-view-header>
+    
+    <px-card header-text='Layout' icon="fa-television">
+         <div class="widget-1">
+             <canvas id="train" width="1200" height="700" style="border:1px solid #000000; display:block; margin:1em auto; border:1px solid black; background:url(../CurrentLayout.png); background-size: 1200px 700px;"></canvas>
+         </div>
+    </px-card>
+
+    <px-twoup id="card-1" widget-header="Train Speed" widget-icon="fa-train">
+         <div class="widget-1" style="resize: none; overflow: auto;">
+             <h3>Train 1 Speed</h3>
+             <span >
+                 <px-gauge value="10" max="50" width="100"></px-gauge> 
+             </span> 
+         </div>
+
+         <div class="widget-2" style="resize: none; overflow: auto;">
+             <h3>Train 2 Speed</h3>
+             <span >
+                 <px-gauge value="10" max="50" width="100"></px-gauge> 
+             </span> 
+         </div>
+     </px-twoup>
+
+
+  </template>
+  <script>
+    Polymer({
+      is: 'train-layout-view',
+      properties: {},
+      ready: function() {
+        console.log('train-layout-view ready()')
+      }
+    });
+  </script>
+</dom-module>

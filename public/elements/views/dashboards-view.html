@@ -2,31 +2,108 @@
 <link rel="import" href="../../bower_components/px-context-browser/px-context-browser.html">
 <link rel="import" href="../../bower_components/px-deck-selector/px-deck-selector.html">
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../bower_components/px-alert-message/px-alert-message.html"/>
+<link rel="import" href="../../bower_components/px-widget-cards/px-sixup.html">
+<link rel="import" href="../../bower_components/px-widget-cards/px-threeup.html">
+
+<link rel="import" href="../../bower_components/px-gauge/px-gauge.html"/>
+<link rel="import" href="../../bower_components/px-simple-horizontal-bar-chart/px-simple-horizontal-bar-chart.html"/>
+<link rel="import" href="../../bower_components/px-simple-bar-chart/px-simple-bar-chart.html"/>
+<link rel="import" href="../../bower_components/px-vis-pie-chart/px-vis-pie-chart.html"/>
+<link rel="import" href="../../bower_components/px-simple-line-chart/px-simple-line-chart.html"/>
 
 <!-- local px-deck -->
 <link rel="import" href="../../elements/px-deck/px-deck-index.html">
 
+<script type="text/javascript" src="../../bower_components/es6-promise/es6-promise.min.js"></script>
+
 <dom-module id="dashboards-view">
-  <template>
+    <template>
+        <px-view-header title="Dashboard" style="display: block; margin-bottom: 6px;"></px-view-header>
+    
+        <!--
+        <px-alert-message
+            type="information"
+            message-title="Success!"
+            message="Trains collision avoided!"
+            auto-dismiss="5000">
+        </px-alert-message>
 
-    <script type="text/javascript" src="../../bower_components/es6-promise/es6-promise.min.js"></script>
+        <px-alert-message
+            type="warning"
+            message-title="Heads up!"
+            message="Trains are about to collide!"
+            auto-dismiss="5000">
+        </px-alert-message>
 
-    <!-- contextIronAjax used to load data from local Predix Asset API -->
-    <iron-ajax
-      id="contextIronAjax"
-      url="/api/predix-asset/root/root"
-      last-response="{{_browserContext}}">
-    </iron-ajax>
+        <px-alert-message
+            type="error"
+            message-title="Oh no!"
+            message="The trains have collided!"
+            auto-dismiss="5000">
+        </px-alert-message>
+        -->
 
-    <!-- decksIronAjax used to load data from local View Service API -->
-    <iron-ajax
-      id="decksIronAjax"
-      url="[[_decksUrl]]"
-      last-response="{{_decksResponse}}">
-      <!-- auto -->
-    </iron-ajax>
+        <!-- contextIronAjax used to load data from local Predix Asset API -->
+        <iron-ajax
+          id="contextIronAjax"
+          url="/api/predix-asset/root/root"
+          last-response="{{_browserContext}}">
+        </iron-ajax>
+
+        <!-- decksIronAjax used to load data from local View Service API -->
+        <iron-ajax
+          id="decksIronAjax"
+          url="[[_decksUrl]]"
+          last-response="{{_decksResponse}}">
+          <!-- auto -->
+        </iron-ajax>
+
+        <px-threeup id="card-1" widget-header="Train Speed" widget-icon="fa-tachometer">
+            <div class="widget-1">
+                <h3>Train 1 Speed</h3>
+                <span>
+                    <px-simple-line-chart></px-simple-line-chart>
+                </span> 
+            </div>
+
+            <div class="widget-2">
+                <h3>Train 2 Speed</h3>
+                <span>
+                    <px-simple-line-chart></px-simple-line-chart>
+                </span>
+            </div>
+
+            <div class="widget-3">
+                <h3>Total Beam Breakers Hits</h3>
+                <span>
+                    <px-simple-bar-chart width="auto" height="auto" chart-data='[[112,57,53,122,128,120,56,94,102]]'></px-simple-bar-chart>
+                </span>
+            </div>
+        </px-threeup>
+
+        <px-threeup id="card-2" widget-header="Beam Breaker Data" widget-icon="fa-tachometer">
+            <div class="widget-1">
+                <span>
+                <px-simple-horizontal-bar-chart width="auto" height="auto" chart-data='[[112,57,53,122,128,120,56,94,102]]'></px-simple-bar-chart>
+                </span>
+            </div>
+
+            <div class="widget-2">
+                <span>
+                <px-vis-pie-chart></px-vis-pie-chart>
+                </span>
+            </div>
+
+            <div class="widget-3">
+                <span>
+                <px-simple-line-chart></px-simple-line-chart>
+                </span>
+            </div>
+        </px-threeup>
 
     <!-- px-context-browser element -->
+    <!--
     <px-context-browser
       id="contextBrowser"
       label-field="name"
@@ -43,6 +120,7 @@
       view-service-base-url="[[viewServiceBaseUrl]]"
       deck-id="[[_selectedDeckId]]">
     </px-deck-index>
+    -->
 
   </template>
   <script>

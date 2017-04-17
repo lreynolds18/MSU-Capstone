@@ -1,0 +1,38 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/px-card/px-card.html"/>
+<link rel="import" href="../../bower_components/px-view-header/px-view-header.html">
+
+<dom-module id="msu-capstone-view">
+  <template>
+    <px-view-header title="MSU Capstone Team" style="display: block; margin-bottom: 6px;"></px-view-header>
+        
+    <px-card header-text='Team' icon="fa-camera-retro">
+        <img src="../msu-capstone.png" alt="Team Picture">        
+    </px-card>
+
+    <px-card header-text='Project Overview' icon="fa-train">
+        <p>General Electric is the leading digital industrial company in the world, transforming the industry with software-defined machines and solutions that are efficient and predictive.</p>
+
+        <p>GE Digital’s Predix platform is a purpose-built, hardened cloud platform that provides the connectivity, security and performance needed to drive advanced industrial applications.</p>
+
+        <p>Our PETT, Predix-Enabled Toy Train, is a model train setup that demonstrates the capabilities of Predix. PETT uses multiple sensors including beam breakers, RFID reader-writer modules and tags, a multi-sensor and more to record data about the location of the moving trains and the state of the track.</p>
+
+        <p>Data from the PETT sensors is collected and sent continuously to the Predix Cloud, which analyzes it and visualizes it. Predix’s predictive analytics determines potential train collisions and other possible problems with sensors, track and trains.</p>
+
+        <p>Based on the feedback from Predix, PETT controls the running trains by sending signals using Digital Command and Control (DCC) to the train engines and the track switches.Our PETT provides GE with a visual and interactive way to showcase Predix to potential customers at their Digital Hub in Detroit and a fun way to inspire young people to pursue careers in engineering at fairs like the Maker Faire in Detroit.</p>
+
+        <p>Two Raspberry Pis read data from sensors using Python. One Raspberry Pi is connected by Pi-SPROG to the DCC track and sends commands with Jython. The data is displayed on a Predix machine using a web browser.</p> 
+    </px-card>
+
+
+  </template>
+  <script>
+    Polymer({
+      is: 'msu-capstone-view',
+      properties: {},
+      ready: function() {
+        console.log('msu-capstone-view ready()')
+      }
+    });
+  </script>
+</dom-module>

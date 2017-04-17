@@ -54,7 +54,7 @@
           <!-- /dashboards route and view -->
           <app-route
             route="[[_route]]"
-            pattern="/dashboards"
+            pattern="/dashboard"
             active="{{_dashboardsActive}}">
           </app-route>
 
@@ -63,16 +63,40 @@
             element-href="/elements/views/dashboards-view.html">
           </px-view>
 
-          <!-- /blankpage route and view -->
           <app-route
             route="[[_route]]"
-            pattern="/blankpage"
-            active="{{_blankpageActive}}">
+            pattern="/train-layout"
+            active="{{_trainlayoutActive}}">
+          </app-route>
+
+          <px-view
+            active="[[_trainlayoutActive]]"
+            element-href="/elements/views/train-layout-view.html">
+          </px-view>
+
+
+          <!-- /time-series route and view -->
+          <app-route
+            route="[[_route]]"
+            pattern="/time-series"
+            active="{{_timeseriesActive}}">
           </app-route>
           <px-view
-            active="[[_blankpageActive]]"
-            element-href="/elements/views/blankpage-view.html">
+            active="[[_timeseriesActive]]"
+            element-href="/elements/views/time-series-view.html">
           </px-view>
+
+          <!-- /time-series route and view -->
+          <app-route
+            route="[[_route]]"
+            pattern="/msu-capstone"
+            active="{{_msucapstoneActive}}">
+          </app-route>
+          <px-view
+            active="[[_msucapstoneActive]]"
+            element-href="/elements/views/msu-capstone-view.html">
+          </px-view>
+
 
           <!-- /winddata route and view -->
           <app-route
@@ -131,17 +155,26 @@
           type: Array,
           value: function() {
             return [{
-              "label": "Dashboards",
-              "path": "/dashboards",
+              "label": "Dashboard",
+              "path": "/dashboard",
               "icon": "fa-tachometer"
-            }, {
-              "label": "Blank Page",
-              "path": "/blankpage",
-              "icon": "fa-file"
-            }
-            //Uncomment this block to show the Simple Asset navigation item on the menu.
-            /* // asset-nav-item
-            ,{
+            }, 
+            {
+              "label": "Train Layout",
+              "path": "/train-layout",
+              "icon": "fa-train"
+            }, 
+            {
+              "label": "Time Series",
+              "path": "/time-series",
+              "icon": "fa-line-chart"
+            }, 
+            {
+              "label": "MSU Capstone Team",
+              "path": "/msu-capstone",
+              "icon": "fa-train"
+            }, 
+            {
               "label": "Simple Asset",
               "path": "/simple-asset",
               "icon": "fa-sitemap"
