@@ -1,4 +1,0 @@
-Header Zone:
-b933888e-4147-45c5-9a76-c2270a909955
-
-https://fdd0e7ac-e780-4116-8632-7f7c85c57c8d.predix-uaa.run.aws-usw02-pr.ice.predix.io

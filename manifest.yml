@@ -1,18 +1,18 @@
 ---
 applications:
-  - name: MSU-Predix-Enabled-Toy-Train
+  - name: train-insights
     memory: 64M
     buildpack: nodejs_buildpack
     command: node server/app.js
     path: dist
 services:
- - MSU-UUA
- - MSU-Timeseries
- - MSU-Asset
+ - msu-uaa
+ - msu-ts
+ - msu-asset
 env:
     node_env: cloud
     uaa_service_label : predix-uaa
     # Add these values for authentication in the cloud
-    #clientId: {Enter client ID, e.g. app-client-id, and place it here}
-    #base64ClientCredential: dWFhLWNsaWVudC1pZDp1YWEtY2xpZW50LWlkLXNlY3JldA==
+    clientId: msu-client-1
+    base64ClientCredential: bXN1LWNsaWVudC0xOk1TVTEyMw==
     #windServiceURL: "{URL of the microservice <your-name>-winddata-timeseries-service}, e.g.  https://your-name-winddata-timeseries-service.run.asw-usw02-pr.predix.io"

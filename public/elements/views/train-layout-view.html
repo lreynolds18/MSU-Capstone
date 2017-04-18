@@ -10,11 +10,13 @@
     <px-view-header title="Train Layout" style="display: block; margin-bottom: 6px;"></px-view-header>
     
     <px-card header-text='Layout' icon="fa-television">
-         <div class="widget-1">
-             <canvas id="train" width="1200" height="700" style="border:1px solid #000000; display:block; margin:1em auto; border:1px solid black; background:url(../CurrentLayout.png); background-size: 1200px 700px;"></canvas>
-         </div>
+        <div class="layout">
+            <div class="layout__item style-scope local-element-demo">
+                <canvas id="train" width="1000px" height="584px;" style="border:1px solid #000000; display:block; margin:1em auto; border:1px solid black; background:url(../CurrentLayout.png); background-size: 1000px 584px;"></canvas>
+            </div>
     </px-card>
 
+    <!--
     <px-twoup id="card-1" widget-header="Train Speed" widget-icon="fa-train">
          <div class="widget-1" style="resize: none; overflow: auto;">
              <h3>Train 1 Speed</h3>
@@ -30,16 +32,78 @@
              </span> 
          </div>
      </px-twoup>
+    -->
 
 
   </template>
   <script>
-    Polymer({
-      is: 'train-layout-view',
-      properties: {},
-      ready: function() {
-        console.log('train-layout-view ready()')
-      }
-    });
+      Polymer({
+          is: 'train-layout-view',
+          properties: {},
+          ready: function() {
+              console.log('train-layout-view ready()')
+                var c = this.$.train;
+                var width = c.width;
+                var height = c.height;
+                // scalex ideally should equal scaley 
+                var rectSize = Math.round(width * 1.0 / 60);
+                var scalex = 1200 * 1.0 / width; 
+                var scaley = 700 * 1.0 / height; 
+                var ctx = c.getContext("2d");
+                var blocks = [
+                              [550, 10],   // block 1
+                              [25, 170],   // block 2
+                              [500, 670],  // block 3
+                              [875, 670],  // block 4
+                              [1080, 600], // block 5
+                              [1155, 180], // block 6
+                              [720, 10],   // block 7
+                              [160, 280],  // block 8
+                              [580, 550],  // block 9
+                              [800, 540],  // block 10
+                              [940, 480],  // block 11
+                              [1015, 320], // block 12
+                              [975, 120],  // block 13
+                              [930, 600],  // block 14
+                              [1005, 500], // block 15
+                              [370, 300],  // block 16
+                              [510, 480],  // block 17
+                             ];
+
+                var colors = [
+                              "#8B0000",
+                              "#68228B",
+                              "#008B45",
+                             ];
+
+                var old = [
+                           null,
+                           null,
+                           null,
+                          ];  
+
+                function updateTrainLocation(blockID, trainID) {
+                    if (old[trainID] != null) {
+                        var b = old[trainID];
+                        var x = Math.round(blocks[b][0] * 1.0 / scalex);
+                        var y = Math.round(blocks[b][1] * 1.0 / scaley);
+                        ctx.clearRect(x, y, rectSize, rectSize);
+                    } 
+
+                    old[trainID] = blockID;
+                    ctx.fillStyle = colors[trainID];
+                    var x = Math.round(blocks[blockID][0] * 1.0 / scalex);
+                    var y = Math.round(blocks[blockID][1] * 1.0 / scaley);
+
+                    ctx.fillRect(x, y, rectSize, rectSize);
+                    
+                }
+
+                var len = blocks.length;
+                for (i=0; i<len; i++) {
+                    updateTrainLocation(i, i%3);
+                }
+          }
+      });
   </script>
 </dom-module>

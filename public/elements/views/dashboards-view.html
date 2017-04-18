@@ -3,8 +3,11 @@
 <link rel="import" href="../../bower_components/px-deck-selector/px-deck-selector.html">
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../../bower_components/px-alert-message/px-alert-message.html"/>
-<link rel="import" href="../../bower_components/px-widget-cards/px-sixup.html">
+
+<link rel="import" href="../../bower_components/px-widget-cards/px-twoup.html">
 <link rel="import" href="../../bower_components/px-widget-cards/px-threeup.html">
+<link rel="import" href="../../bower_components/px-widget-cards/px-fourup.html">
+<link rel="import" href="../../bower_components/px-widget-cards/px-sixup.html">
 
 <link rel="import" href="../../bower_components/px-gauge/px-gauge.html"/>
 <link rel="import" href="../../bower_components/px-simple-horizontal-bar-chart/px-simple-horizontal-bar-chart.html"/>
@@ -102,6 +105,21 @@
             </div>
         </px-threeup>
 
+        <px-twoup id="card-3" widget-header="Broken Parts" widget-icon="fa-dollar">
+            <div class="widget-1">
+                <span>
+                    <h3>Number of Trains Broken</h3> 
+                    <px-simple-horizontal-bar-chart 
+                        chart-data="[0, 0, 2, 0, 0]" 
+                        bar-labels="values" 
+                        colors='["#8b2252", "#7ec0ee", "#a020f0", "#eeaeee", "#9aff9a"]' 
+                        legend-labels='["Josh", "Lucas", "Matt", "Henok", "Lama"]'> 
+                    </px-simple-horizontal-bar-chart>
+
+                </span>
+            </div>
+
+        </px-twoup>
     <!-- px-context-browser element -->
     <!--
     <px-context-browser
