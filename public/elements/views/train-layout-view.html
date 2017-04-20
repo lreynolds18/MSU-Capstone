@@ -69,7 +69,6 @@
     -->
 
   </template>
-  <script src="../mqttws31.min.js" type="text/javascript"></script>
   <script src="../socket.io.min.js" type="text/javascript"></script>
   <script>
       Polymer({
@@ -155,11 +154,21 @@
 
               var socket = io('http://localhost:1884');
               socket.on('connect', function () {
-                  socket.send('hi');
+                  socket.send('train-layout');
 
                   socket.on('message', function (msg) {
                       console.log(msg);
-                      updateTrainLocation(parseInt(msg), 0);
+                      if (msg['name'] == "train1Block") {
+                          value = parseInt(msg['value']);
+                          if (value >= 0 && value <= 16) { 
+                              updateTrainLocation(parseInt(msg['value']), 0);
+                          }
+                      } else if (msg['name'] == "train2Block") {
+                          value = parseInt(msg['value']);
+                          if (value >= 0 && value <= 16) { 
+                              updateTrainLocation(parseInt(msg['value']), 1);
+                          }
+                      }
                   });
               });
           }

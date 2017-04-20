@@ -3,9 +3,6 @@ const mqtt = require('mqtt');
 const WebSocket = require('ws');
 
 let subscriber = {};
-// const htpp = require('http');
-// const io require('socket.io');
-
 
 var express = require('express'), http = require('http');
 var app = express();
@@ -14,8 +11,12 @@ var io = require('socket.io').listen(server);
 
 server.listen(1884);
 
+var location = "";
 io.on('connection', function (socket) {
-    socket.on('message', function (msg) {console.log(msg)});
+    socket.on('message', function (msg) {
+        console.log("|" + msg + "|")
+        location = msg;
+    });
     socket.on('disconnect', function () { });
 
 
@@ -28,30 +29,18 @@ io.on('connection', function (socket) {
     client.on('message', (topic, message) => {
         var m = message.toString('ascii');
         var parsedJSON = JSON.parse(m);
-        socket.send(parsedJSON['value']);
+        if (location == "train-layout") {
+            if (parsedJSON['name'] == "train1Block" ||
+                parsedJSON['name'] == "train2Block" ||
+                parsedJSON['name'] == "sprogSpeed"  ||
+                parsedJSON['name'] == "sprogPower"  ||
+                parsedJSON['name'] == "trainSpeed") {
+                socket.send(parsedJSON);
+            }
+        } else if (location == "dashboard") {
+            socket.send(parsedJSON);
+        }
     });
-});
-
-
-// app.get('/', function(req, res){
-//   res.send('<h1>Hello world</h1>');
-// });
-// 
-// http.listen(3000, function(){
-//   console.log('listening on *:3000');
-// });
-
-
-var client = mqtt.connect('mqtt://localhost:1883');
-
-client.on('connect', () => {
-    client.subscribe("tojs")
-});
-
-client.on('message', (topic, message) => {
-    var m = message.toString('ascii');
-    var parsedJSON = JSON.parse(m);
-    console.log(parsedJSON['value']);
 });
 
 

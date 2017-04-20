@@ -23,21 +23,44 @@
 <dom-module id="dashboards-view">
     <template>
         <px-view-header title="Dashboard" style="display: block; margin-bottom: 6px;"></px-view-header>
-    
-        <!-- contextIronAjax used to load data from local Predix Asset API -->
-        <iron-ajax
-          id="contextIronAjax"
-          url="/api/predix-asset/root/root"
-          last-response="{{_browserContext}}">
-        </iron-ajax>
 
-        <!-- decksIronAjax used to load data from local View Service API -->
-        <iron-ajax
-          id="decksIronAjax"
-          url="[[_decksUrl]]"
-          last-response="{{_decksResponse}}">
-          <!-- auto -->
-        </iron-ajax>
+        <px-threeup id="card-1" widget-header="Multisensor" widget-icon="fa-thermometer">
+            <div class="widget-1">
+                <h3>Temperature</h3>
+                <span>
+                    <px-simple-line-chart
+                        id="temperature"
+                        min=[[temperatureMin]]
+                        max=[[temperatureMax]]
+                        min-label="min"
+                        max-label="max"
+                        threshold-label="avg"
+                        linedata=[[temperatureData]]
+                        threshold=[[temperatureThreshold]]>
+                    </px-simple-line-chart>
+                </span> 
+            </div>
+
+            <div class="widget-2">
+                <h3>Altitude</h3>
+                <span>
+                    <px-simple-line-chart
+                        id="altitude"
+                    >
+                    </px-simple-line-chart>
+                </span>
+            </div>
+
+            <div class="widget-3">
+                <h3>Pressure</h3>
+                <span>
+                    <px-simple-line-chart
+                        id="pressure"
+                    >
+                    </px-simple-line-chart>
+                </span>
+            </div>
+        </px-threeup>
 
         <px-threeup id="card-1" widget-header="Train Speed" widget-icon="fa-tachometer">
             <div class="widget-1">
@@ -123,12 +146,29 @@
     -->
 
   </template>
+  <script src="../socket.io.min.js" type="text/javascript"></script>
   <script>
     Polymer({
 
       is: 'dashboards-view',
 
       properties: {
+        temperatureMin: {
+            type: String,
+            value: '10'
+        }, 
+        temperatureMax: {
+            type: String,
+            value: '30'
+        }, 
+        temperatureData: {
+            type: String,
+            value: '[10, 11, 12, 13, 14]'
+        }, 
+        temperatureThreshold: {
+            type: String,
+            value: '20'
+        }, 
         _decks: {
           type: Array,
           computed: '_computeDecks(_decksResponse)'
@@ -173,6 +213,19 @@
       },
 
       ready: function ready() {
+        console.log(this.$.temperatureMin);
+        console.log(this.$.temperatureMax);
+        console.log(this.$.temperatureData); 
+        console.log(this.$.temperatureThreshold);
+        // var socket = io('http://localhost:1884');
+        // socket.on('connect', function () {
+        //     socket.send('dashboard');
+
+        //     socket.on('message', function (msg) {
+        //         console.log(msg);
+        //     });
+        // });
+
         var _this = this;
         this.$.contextBrowser.handlers = {
           // getChildren fires when a node is 'selected'
@@ -187,6 +240,7 @@
         // initialize context data and decks
         this.$.contextIronAjax.generateRequest();
         this.$.decksIronAjax.generateRequest();
+
       },
 
       _computeDecks: function() {
