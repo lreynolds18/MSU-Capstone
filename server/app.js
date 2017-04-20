@@ -19,6 +19,9 @@ var config = require('./predix-config');
 // configure passport for authentication with UAA
 var passportConfig = require('./passport-config');
 
+var WebSocket = require('ws');
+var subscriber = require('./subscriber');
+
 // if running locally, we need to set up the proxy from local config file:
 var node_env = process.env.node_env || 'development';
 if (node_env === 'development') {
