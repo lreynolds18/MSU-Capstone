@@ -13,12 +13,14 @@
         
     <px-card header-text='Time Series' icon="fa-line-chart">
 
-      <!--<iron-ajax id="ajax" url="/api/msu/timeseries" on-response="_onResponse" last-response="{{_simpleDataValuesB}}"
+      <!--
+      <iron-ajax id="ajax" url="/api/msu/timeseries" on-response="_onResponse" last-response="{{_simpleDataValuesB}}"
         auto>
       </iron-ajax>
       <iron-ajax id="ajax2" url="/api/msu/timeseries/sum" on-response="_onResponse2" last-response="{{_sum}}"
         auto>
-      </iron-ajax>-->
+      </iron-ajax>
+      -->
 
       <px-simple-line-chart line-data="[[_simpleDataValuesB.data.values]]" width="auto" max="10" min="0" threshold="5">
       </px-simple-line-chart>

@@ -10,6 +10,31 @@
     <px-view-header title="Train Layout" style="display: block; margin-bottom: 6px;"></px-view-header>
     
     <px-card header-text='Layout' icon="fa-television">
+        <div class="alerts" id="alerts">
+        <!--
+        <px-alert-message
+            type="information"
+            message-title="Success!"
+            message="Trains collision avoided!"
+            auto-dismiss="5000">
+        </px-alert-message>
+
+        <px-alert-message
+            type="warning"
+            message-title="Heads up!"
+            message="Trains are about to collide!"
+            auto-dismiss="5000">
+        </px-alert-message>
+
+        <px-alert-message
+            type="error"
+            message-title="Oh no!"
+            message="The trains have collided!"
+            auto-dismiss="5000">
+        </px-alert-message>
+        -->
+
+        </div>
         <div class="layout">
             <div class="layout__item style-scope local-element-demo">
                 <canvas id="train" width="1000px" height="584px;" style="border:1px solid #000000; display:block; margin:1em auto; border:1px solid black; background:url(../CurrentLayout.png); background-size: 1000px 584px;"></canvas>
@@ -103,6 +128,10 @@
                 for (i=0; i<len; i++) {
                     updateTrainLocation(i, i%3);
                 }
+
+                setInterval(function() {
+                    this.$.alerts.innerHTML = "</p>HELLO<p>";
+                }, 5000);
           }
       });
   </script>
