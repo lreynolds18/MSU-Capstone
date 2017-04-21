@@ -1,0 +1,304 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/px-context-browser/px-context-browser.html">
+<link rel="import" href="../../bower_components/px-deck-selector/px-deck-selector.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../bower_components/px-alert-message/px-alert-message.html"/>
+
+<link rel="import" href="../../bower_components/px-widget-cards/px-twoup.html">
+<link rel="import" href="../../bower_components/px-widget-cards/px-threeup.html">
+<link rel="import" href="../../bower_components/px-widget-cards/px-fourup.html">
+<link rel="import" href="../../bower_components/px-widget-cards/px-sixup.html">
+
+<link rel="import" href="../../bower_components/px-gauge/px-gauge.html"/>
+<link rel="import" href="../../bower_components/px-simple-horizontal-bar-chart/px-simple-horizontal-bar-chart.html"/>
+<link rel="import" href="../../bower_components/px-simple-bar-chart/px-simple-bar-chart.html"/>
+<link rel="import" href="../../bower_components/px-vis-pie-chart/px-vis-pie-chart.html"/>
+<link rel="import" href="../../bower_components/px-simple-line-chart/px-simple-line-chart.html"/>
+
+<!-- local px-deck -->
+<link rel="import" href="../../elements/px-deck/px-deck-index.html">
+
+<script type="text/javascript" src="../../bower_components/es6-promise/es6-promise.min.js"></script>
+
+<dom-module id="dashboards-view">
+    <template>
+        <px-view-header title="Dashboard" style="display: block; margin-bottom: 6px;"></px-view-header>
+
+        <px-threeup id="card-1" widget-header="Multisensor" widget-icon="fa-thermometer">
+            <div class="widget-1">
+                <h3>Temperature</h3>
+                <span>
+                    <px-simple-line-chart
+                        id="temperature"
+                        min="[[_temperatureMin]]"
+                        max="[[_temperatureMax]]"
+                        min-label="min"
+                        max-label="max"
+                        threshold-label="avg"
+                        linedata="[[_temperatureData]]"
+                        threshold="[[_temperatureThreshold]]">
+                    </px-simple-line-chart>
+                </span> 
+            </div>
+
+            <div class="widget-2">
+                <h3>Altitude</h3>
+                <span>
+                    <px-simple-line-chart
+                        id="altitude"
+                    >
+                    </px-simple-line-chart>
+                </span>
+            </div>
+
+            <div class="widget-3">
+                <h3>Pressure</h3>
+                <span>
+                    <px-simple-line-chart
+                        id="pressure"
+                    >
+                    </px-simple-line-chart>
+                </span>
+            </div>
+        </px-threeup>
+
+        <!--
+        <px-threeup id="card-1" widget-header="Train Speed" widget-icon="fa-tachometer">
+            <div class="widget-1">
+                <h3>Train 1 Speed</h3>
+                <span>
+                    <px-simple-line-chart></px-simple-line-chart>
+                </span> 
+            </div>
+
+            <div class="widget-2">
+                <h3>Train 2 Speed</h3>
+                <span>
+                    <px-simple-line-chart></px-simple-line-chart>
+                </span>
+            </div>
+
+            <div class="widget-3">
+                <h3>Total Beam Breakers Hits</h3>
+                <span>
+                    <px-simple-horizontal-bar-chart 
+                        chart-data="[5, 2, 3, 4, 2, 1, 1, 8, 9]" 
+                        bar-labels="values" 
+                        colors='["#8b2252", "#7ec0ee", "#a020f0", "#eeaeee", "#9aff9a", "#4286f4", "#f441f1", "#f441f1", "#8ef441"]' 
+                        legend-labels='["1", "2", "3", "4", "5", "6", "7", "8", "9"]'> 
+                    </px-simple-horizontal-bar-chart>
+                </span>
+            </div>
+        </px-threeup>
+        -->
+
+        <!--
+        <px-threeup id="card-2" widget-header="Beam Breaker Data" widget-icon="fa-tachometer">
+            <div class="widget-1">
+                <span>
+                <px-simple-horizontal-bar-chart width="auto" height="auto" chart-data='[[112,57,53,122,128,120,56,94,102]]'></px-simple-bar-chart>
+                </span>
+            </div>
+
+            <div class="widget-2">
+                <span>
+                <px-vis-pie-chart></px-vis-pie-chart>
+                </span>
+            </div>
+
+            <div class="widget-3">
+                <span>
+                <px-simple-line-chart></px-simple-line-chart>
+                </span>
+            </div>
+        </px-threeup>
+        -->
+
+        <!--
+        <px-twoup id="card-3" widget-header="Broken Parts" widget-icon="fa-dollar">
+            <div class="widget-1">
+                <span>
+                    <h3>Number of Trains Broken</h3> 
+                    <px-simple-horizontal-bar-chart 
+                        chart-data="[0, 0, 2, 0, 0]" 
+                        bar-labels="values" 
+                        colors='["#8b2252", "#7ec0ee", "#a020f0", "#eeaeee", "#9aff9a"]' 
+                        legend-labels='["Josh", "Lucas", "Matt", "Henok", "Lama"]'> 
+                    </px-simple-horizontal-bar-chart>
+
+                </span>
+            </div>
+
+        </px-twoup>
+        -->
+    
+    <!-- px-context-browser element -->
+    <!--
+    <px-context-browser
+      id="contextBrowser"
+      label-field="name"
+      id-field="id"
+      browser-context="[[_initialBrowserContext]]"
+      show-chevron="true">
+      <px-deck-selector
+        decks="[[_decks]]"
+        selected-deck="{{_selectedDeck}}">
+      </px-deck-selector>
+    </px-context-browser>
+
+    <px-deck-index
+      view-service-base-url="[[viewServiceBaseUrl]]"
+      deck-id="[[_selectedDeckId]]">
+    </px-deck-index>
+    -->
+
+  </template>
+  <script src="../socket.io.min.js" type="text/javascript"></script>
+  <script>
+    Polymer({
+
+      is: 'dashboards-view',
+
+      properties: {
+        _temperatureMin: {
+            type: String,
+            value: '10'
+        }, 
+        _temperatureMax: {
+            type: String,
+            value: '30'
+        }, 
+        _temperatureData: {
+            type: String,
+            value: '[10, 11, 12, 13, 14]'
+        }, 
+        _temperatureThreshold: {
+            type: String,
+            value: '20'
+        }, 
+        _decks: {
+          type: Array,
+          computed: '_computeDecks(_decksResponse)'
+        },
+        _initialBrowserContext: {
+          type: Object,
+          computed: '_computeInitialBrowserContext(_browserContext)'
+        },
+        _nodeUri: {
+          type: String
+        },
+        _decksUrl: {
+          type: String,
+          computed: '_computeDecksUrl(_selectedContextTag, viewServiceBaseUrl)'
+        },
+        _selectedContextTag: {
+          type: String,
+          value: ''
+        },
+        viewServiceBaseUrl: {
+          type: String,
+          value: '/api/view-service/'
+        },
+        _selectedDeckId: {
+          type: String,
+          computed: '_computeSelectedDeckId(_selectedDeck)'
+        }
+      },
+
+      _computeDecksUrl: function() {
+        if(this._selectedContextTag) {
+          return this.viewServiceBaseUrl + "decks?tag=" + this._selectedContextTag;
+        } else {
+          return this.viewServiceBaseUrl + "decks";
+        }
+      },
+
+      _computeSelectedDeckId: function() {
+        if(this._selectedDeck) {
+          return this._selectedDeck.id;
+        }
+      },
+
+      ready: function ready() {
+        console.log(this.$.temperatureMin);
+        console.log(this.$.temperatureMax);
+        console.log(this.$.temperatureData); 
+        console.log(this.$.temperatureThreshold);
+        // var socket = io('http://localhost:1884');
+        // socket.on('connect', function () {
+        //     socket.send('dashboard');
+
+        //     socket.on('message', function (msg) {
+        //         console.log(msg);
+        //     });
+        // });
+
+        // var _this = this;
+        // this.$.contextBrowser.handlers = {
+        //   // getChildren fires when a node is 'selected'
+        //   getChildren: function(parent, newIndex) {
+        //     return _this._getChildren(parent);
+        //   },
+        //   // itemOpenHandler fires when a node's 'open' link is clicked
+        //   itemOpenHandler: function(item) {
+        //     return _this._itemOpenHandler(item);
+        //   }
+        // };
+        // // initialize context data and decks
+        // this.$.contextIronAjax.generateRequest();
+        // this.$.decksIronAjax.generateRequest();
+
+      },
+
+      _computeDecks: function() {
+        var decks = [];
+        if (this._decksResponse && this._decksResponse.length > 0) {
+          this._decksResponse.forEach(function(deck) {
+            decks.push({ name: deck.title, id: deck.id });
+          });
+        };
+        return decks;
+      },
+
+      _computeInitialBrowserContext: function(_browserContext) {
+        if(typeof this._initialBrowserContext !== 'object') {
+          return _browserContext;
+        } else {
+          return this._initialBrowserContext;
+        }
+      },
+
+      // "getChildren" handler for px-context-browser
+      // this function is passed into
+      _getChildren: function(node) {
+        var that = this;
+        return new Promise(function(resolve, reject) {
+          var req = new XMLHttpRequest();
+          req.open('GET', '/api/predix-asset' + node.uri);
+
+          req.onload = function() {
+            if (req.status === 200) {
+              that._nodeUri = node.uri;
+              // that._computeDecks();
+              resolve(JSON.parse(req.response));
+            } else {
+              reject(req.statusText);
+            }
+          };
+
+          req.onError = function() {
+            reject("Network Error");
+          };
+
+          req.send()
+        });
+      },
+
+      _itemOpenHandler: function(item) {
+        this._selectedContextTag = item.id;
+        this.$.decksIronAjax.generateRequest();
+      },
+
+    });
+  </script>
+</dom-module>

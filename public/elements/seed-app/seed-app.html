@@ -65,6 +65,17 @@
 
           <app-route
             route="[[_route]]"
+            pattern="/multisensor"
+            active="{{_multisensorActive}}">
+          </app-route>
+
+          <px-view
+            active="[[_multisensorActive]]"
+            element-href="/elements/views/multisensor-view.html">
+          </px-view>
+
+          <app-route
+            route="[[_route]]"
             pattern="/train-layout"
             active="{{_trainlayoutActive}}">
           </app-route>
@@ -163,12 +174,19 @@
               "label": "Train Layout",
               "path": "/train-layout",
               "icon": "fa-television"
-            }, 
+            },
+            {
+              "label": "Multisensor",
+              "path": "/multisensor",
+              "icon": "fa-tachometer"
+            },
+            /*
             {
               "label": "Time Series",
               "path": "/time-series",
               "icon": "fa-line-chart"
             }, 
+            */
             {
               "label": "MSU Capstone Team",
               "path": "/msu-capstone",

@@ -17,21 +17,37 @@
     </style>
     
     <px-card header-text='Layout' icon="fa-television">
+        <div class="layout">
+            <div class="layout__item style-scope local-element-demo">
+                <canvas id="train" width="1000px" height="584px;" style="border:1px solid #000000; display:block; margin:1em auto; border:1px solid black; background:url(../CurrentLayout.png); background-size: 1000px 584px;"></canvas>
+            </div>
+        </div>
+
         <div class="alerts" id="alerts">
             <px-alert-message
                 id="success"
                 class="hide"
                 type="information"
                 message-title="Success!"
-                message="Train collision avoided!">
+                message="[[successMessage]]">
             </px-alert-message>
-    
+
+             <!--
+             <px-alert-message
+                id="resolved"
+                class="hide"
+                type="information"
+                message-title="Success!"
+                message="Collision avoided!">
+            </px-alert-message>
+            -->
+
             <px-alert-message
                 id="warning"
                 class="hide"
                 type="warning"
                 message-title="Heads up!"
-                message="Trains are about to collide!">
+                message="[[warningMessage]]">
             </px-alert-message>
     
             <!--
@@ -44,10 +60,7 @@
             -->
         </div>
 
-        <div class="layout">
-            <div class="layout__item style-scope local-element-demo">
-                <canvas id="train" width="1000px" height="584px;" style="border:1px solid #000000; display:block; margin:1em auto; border:1px solid black; background:url(../CurrentLayout.png); background-size: 1000px 584px;"></canvas>
-            </div>
+
     </px-card>
 
     <!--
@@ -110,63 +123,69 @@
                            ];
 
               var old = [
-                         null,
-                         null,
+                         [null, null],
+                         [null, null]
                         ];  
 
               function updateTrainLocation(blockID, trainID) {
-                  if (old[trainID] != null) {
-                      var b = old[trainID];
-                      var x = Math.round(blocks[b][0] * 1.0 / scalex);
-                      var y = Math.round(blocks[b][1] * 1.0 / scaley);
-                      ctx.clearRect(x, y, rectSize, rectSize);
+                  if (old[trainID][0] != null && old[trainID][1] != null) {
+                      ctx.clearRect(old[trainID][0], old[trainID][1], rectSize, rectSize);
                   } 
 
-                  old[trainID] = blockID;
                   ctx.fillStyle = colors[trainID];
                   var x = Math.round(blocks[blockID][0] * 1.0 / scalex);
                   var y = Math.round(blocks[blockID][1] * 1.0 / scaley);
+                  old[trainID][0] = x;
+                  old[trainID][1] = y;
 
                   ctx.fillRect(x, y, rectSize, rectSize);
                   
               }
 
               var len = blocks.length;
-              // for (i=0; i<len; i++) {
-              //     updateTrainLocation(i, i%2);
-              // }
 
-              function setAlertMessage(type) {
-                  if (type == "success") {
-                      this.success.classList.add("hide");
-                      setTimeout(function() {this.success.classList.remove("hide");}, 5000);
-                  } else if (type == "warning") {
+              function turnOnOffMessage(type, unhide) {
+                  if (type == "warning" && unhide == 0) {
                       this.warning.classList.add("hide");
-                      setTimeout(function() {this.warning.classList.remove("hide");}, 5000);
+                  } else if (type == "warning" && unhide == 1) {
+                      this.warning.classList.remove("hide");
+                  } else if (type == "success" && unhide == 0) {
+                      this.success.classList.add("hide");
+                  } else if (type == "success" && unhide == 1) {
+                      this.success.classList.remove("hide");
+                  } else if (type == "resolved" && unide == 0) {
+                      this.resolved.classList.add("hide");
+                  } else if (type == "resolved" && unhide == 1) {
+                      this.resolved.classList.remove("hide");
                   }
               }
 
-              // setInterval(function() {
-              //    setAlertMessage("success"); 
-              //    setAlertMessage("warning"); 
-              // }, 10000);
-
-
+              var globalthis = this;
+              
               var socket = io('http://localhost:1884');
               socket.on('connect', function () {
                   socket.send('train-layout');
 
                   socket.on('message', function (msg) {
-                      console.log(msg);
-                      if (msg['name'] == "train1Block") {
-                          value = parseInt(msg['value']);
-                          if (value >= 0 && value <= 16) { 
-                              updateTrainLocation(parseInt(msg['value']), 0);
-                          }
-                      } else if (msg['name'] == "train2Block") {
-                          value = parseInt(msg['value']);
-                          if (value >= 0 && value <= 16) { 
-                              updateTrainLocation(parseInt(msg['value']), 1);
+                      if (msg['id'] == "updateTrain") {
+                          var id = parseInt(msg['trainID']);
+                          var value = parseInt(msg['block']) - 1;
+                          updateTrainLocation(value % 17, id % 2);
+                      } else if (msg['id'] == "message") {
+                          if (msg['value'] == "Possible train collision detected!") {
+                              console.log(msg);
+                              globalthis.warningMessage = msg['value']
+                              turnOnOffMessage("warning", 1); 
+                          } else if (msg['value'] == "offTrainWarning") {
+                              console.log(msg);
+                              turnOnOffMessage("warning", 0);
+                              globalthis.successMessage = "Collision avoided!";
+                              turnOnOffMessage("success", 1);
+                              setTimeout(function() {turnOnOffMessage("success", 0);}, 3000);
+                          } else {
+                              globalthis.successMessage = msg['value']
+                              turnOnOffMessage("success", 1)
+                              setTimeout(function() {turnOnOffMessage("success", 0);}, 3000);
                           }
                       }
                   });

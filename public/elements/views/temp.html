@@ -1,0 +1,73 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/px-view-header/px-view-header.html">
+<link rel="import" href="../../bower_components/px-context-browser/px-context-browser.html">
+<link rel="import" href="../../bower_components/px-deck-selector/px-deck-selector.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../bower_components/px-alert-message/px-alert-message.html"/>
+
+<link rel="import" href="../../bower_components/px-widget-cards/px-twoup.html">
+<link rel="import" href="../../bower_components/px-widget-cards/px-threeup.html">
+<link rel="import" href="../../bower_components/px-widget-cards/px-fourup.html">
+<link rel="import" href="../../bower_components/px-widget-cards/px-sixup.html">
+
+<link rel="import" href="../../bower_components/px-gauge/px-gauge.html"/>
+<link rel="import" href="../../bower_components/px-simple-horizontal-bar-chart/px-simple-horizontal-bar-chart.html"/>
+<link rel="import" href="../../bower_components/px-simple-bar-chart/px-simple-bar-chart.html"/>
+<link rel="import" href="../../bower_components/px-vis-pie-chart/px-vis-pie-chart.html"/>
+<link rel="import" href="../../bower_components/px-simple-line-chart/px-simple-line-chart.html"/>
+
+
+<script type="text/javascript" src="../../bower_components/px/dist/px.min.js"></script>
+
+<dom-module id="dashboards-view">
+  <template>
+    <px-view-header title="Dashboards" style="display: block; margin-bottom: 6px;"></px-view-header>
+         <px-threeup id="card-1" widget-header="Multisensor" widget-icon="fa-thermometer">
+            <div class="widget-1">
+                <h3>Temperature</h3>
+                <span>
+                    <px-simple-line-chart
+                        id="temperature"
+                        min="[[_temperatureMin]]"
+                        max="[[_temperatureMax]]"
+                        min-label="min"
+                        max-label="max"
+                        threshold-label="avg"
+                        linedata="[[_temperatureData]]"
+                        threshold="[[_temperatureThreshold]]">
+                    </px-simple-line-chart>
+                </span> 
+            </div>
+
+            <div class="widget-2">
+                <h3>Altitude</h3>
+                <span>
+                    <px-simple-line-chart
+                        id="altitude"
+                    >
+                    </px-simple-line-chart>
+                </span>
+            </div>
+
+            <div class="widget-3">
+                <h3>Pressure</h3>
+                <span>
+                    <px-simple-line-chart
+                        id="pressure"
+                    >
+                    </px-simple-line-chart>
+                </span>
+            </div>
+        </px-threeup>
+
+  </template>
+  <script>
+    Polymer({
+      is: 'dashboards-view',
+      properties: {},
+      ready: function() {
+        console.log('dashboards-view ready()')
+      }
+    });
+  </script>
+</dom-module>

@@ -1,0 +1,124 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/px-view-header/px-view-header.html">
+<link rel="import" href="../../bower_components/px-context-browser/px-context-browser.html">
+<link rel="import" href="../../bower_components/px-deck-selector/px-deck-selector.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../bower_components/px-alert-message/px-alert-message.html"/>
+
+<link rel="import" href="../../bower_components/px-widget-cards/px-twoup.html">
+<link rel="import" href="../../bower_components/px-widget-cards/px-threeup.html">
+<link rel="import" href="../../bower_components/px-widget-cards/px-fourup.html">
+<link rel="import" href="../../bower_components/px-widget-cards/px-sixup.html">
+
+<link rel="import" href="../../bower_components/px-gauge/px-gauge.html"/>
+<link rel="import" href="../../bower_components/px-simple-horizontal-bar-chart/px-simple-horizontal-bar-chart.html"/>
+<link rel="import" href="../../bower_components/px-simple-bar-chart/px-simple-bar-chart.html"/>
+<link rel="import" href="../../bower_components/px-vis-pie-chart/px-vis-pie-chart.html"/>
+<link rel="import" href="../../bower_components/px-simple-line-chart/px-simple-line-chart.html"/>
+
+
+<script type="text/javascript" src="../../bower_components/px/dist/px.min.js"></script>
+<script src="../socket.io.min.js" type="text/javascript"></script>
+
+<dom-module id="multisensor-view">
+  <template> 
+    <px-view-header title="Multisensor" style="display: block; margin-bottom: 6px;"></px-view-header>
+
+       <px-threeup id="card-1" widget-header="Multisensor" widget-icon="fa-tachometer">
+          <div class="widget-1">
+              <h3>Temperature (</h3>
+              <span>
+                      
+                  <px-simple-line-chart
+                      id="temperature (C)"
+                      min="[[tempMin]]"
+                      max="[[tempMax]]"
+                      min-label="min [[tempMin]]"
+                      max-label="max [[tempMax]]"
+                      threshold-label="avg [[tempAvg]]"
+                      line-data="[[tempValue]]"
+                      threshold="[[tempAvg]]">
+                  </px-simple-line-chart>
+
+              </span> 
+          </div>
+
+          <div class="widget-2">
+              <h3>Altitude (m)</h3>
+              <span>
+    
+                  <px-simple-line-chart
+                      id="altitude"
+                      min="[[altitudeMin]]"
+                      max="[[altitudeMax]]"
+                      min-label="min [[altitudeMin]]"
+                      max-label="max [[altitudeMax]]"
+                      threshold-label="avg [[altitudeAvg]]"
+                      line-data="[[altitudeValue]]"
+                      threshold="[[altitudeAvg]]">
+                  </px-simple-line-chart>
+
+              </span>
+          </div>
+
+          <div class="widget-3">
+              <h3>Pressure (Pa)</h3>
+              <span>
+
+                  <px-simple-line-chart
+                      id="pressure"
+                      min="[[pressureMin]]"
+                      max="[[pressureMax]]"
+                      min-label="min [[pressureMin]]"
+                      max-label="max [[pressureMax]]"
+                      threshold-label="avg [[pressureAvg]]"
+                      line-data="[[pressureValue]]"
+                      threshold="[[pressureAvg]]">
+                  </px-simple-line-chart>
+
+              </span>
+          </div>
+       </px-threeup>
+
+  </template>
+</dom-module>
+
+<script>
+    Polymer({
+      is: 'multisensor-view',
+      properties: {
+      },
+      ready: function() {
+          console.log('multisensor-view ready()');
+
+          var globalthis = this;
+
+          var socket = io('http://localhost:1884');
+          socket.on('connect', function () {
+              socket.send('multisensor');
+
+              socket.on('message', function (msg) {
+                  if (msg['id'] == "temperature") {
+                      globalthis.tempMin = "15";
+                      globalthis.tempMax = "35";
+                      globalthis.tempAvg = msg['mean'];
+                      globalthis.tempValue = msg['value'];
+                  } else if (msg['id'] == "altitude") {
+                      globalthis.altitudeMin = "200";
+                      globalthis.altitudeMax = "250";
+                      globalthis.altitudeAvg = msg['mean'];
+                      globalthis.altitudeValue = msg['value'];
+                  } else if (msg['id'] == "pressure") {
+                      globalthis.pressureMin = "96000";
+                      globalthis.pressureMax = "110000";
+                      globalthis.pressureAvg = msg['mean'];
+                      globalthis.pressureValue = msg['value'];
+                  }
+              });
+          });
+   
+      }
+    });
+</script>
+
+
