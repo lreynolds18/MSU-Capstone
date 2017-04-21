@@ -97,25 +97,32 @@
               var scalex = 1200 * 1.0 / width; 
               var scaley = 700 * 1.0 / height; 
               var ctx = c.getContext("2d");
+
+              // these are the points on the display
+              // we split the train layout into blocks
+              // then based on the blocks length, we split that more
               var blocks = [
-                            [550, 10],   // block 1
-                            [25, 170],   // block 2
-                            [500, 670],  // block 3
-                            [875, 670],  // block 4
-                            [1080, 600], // block 5
-                            [1155, 180], // block 6
-                            [720, 10],   // block 7
-                            [160, 280],  // block 8
-                            [580, 550],  // block 9
-                            [800, 540],  // block 10
-                            [940, 480],  // block 11
-                            [1015, 320], // block 12
-                            [975, 120],  // block 13
-                            [930, 600],  // block 14
-                            [1005, 500], // block 15
-                            [370, 300],  // block 16
-                            [510, 480],  // block 17
+                            [[650, 10], [530, 10]],                                      // block 1
+                            [[210, 20], [80, 90], [15, 260], [15, 380]],                 // block 2
+                            [[100, 610], [300, 670], [500, 670], [670, 670]],            // block 3
+                            [[895, 670]],                                                // block 4
+                            [[1080, 600], [1165, 470], [1165, 330]],                     // block 5
+                            [[1150, 160], [1080, 75], [940, 15]],                        // block 6
+                            [[750, 10]],                                                 // block 7
+                            [[230, 90], [170, 190], [165, 320], [220, 460], [350, 540]], // block 8
+                            [[580, 550]],                                                // block 9
+                            [[830, 540]],                                                // block 10
+                            [[985, 430]],                                                // block 11
+                            [[1015, 320]],                                               // block 12
+                            [[1000, 160], [920, 70]],                                    // block 13
+                            [[880, 640]],                                                // block 14
+                            [[970, 570], [1010, 490]],                                   // block 15
+                            [[370, 300]],                                                // block 16
+                            [[510, 480]],                                                // block 17
                            ];
+
+              
+              var indexing = [6.5, 10.0, 7.0, 7.0, 8.0, 8.0, 5.0, 8.0, 5.5, 11.0, 8.0, 6.0, 9.0, 6.5, 5.5, 6.5, 13.0];
 
               var colors = [
                             "#8B0000",
@@ -127,14 +134,16 @@
                          [null, null]
                         ];  
 
-              function updateTrainLocation(blockID, trainID) {
+              function updateTrainLocation(blockID, blockLoc, trainID) {
                   if (old[trainID][0] != null && old[trainID][1] != null) {
                       ctx.clearRect(old[trainID][0], old[trainID][1], rectSize, rectSize);
                   } 
 
                   ctx.fillStyle = colors[trainID];
-                  var x = Math.round(blocks[blockID][0] * 1.0 / scalex);
-                  var y = Math.round(blocks[blockID][1] * 1.0 / scaley);
+                  var bx = blocks[blockID][blockLoc][0];
+                  var by = blocks[blockID][blockLoc][1];
+                  var x = Math.round(bx * 1.0 / scalex);
+                  var y = Math.round(by * 1.0 / scaley);
                   old[trainID][0] = x;
                   old[trainID][1] = y;
 
@@ -142,7 +151,14 @@
                   
               }
 
-              var len = blocks.length;
+              // tester
+              // var len = blocks.length;
+              // for (i=0; i<len; i++) {
+              //     var leng = blocks[i].length;
+              //     for (j=0; j<leng; j++) {
+              //         updateTrainLocation(i, j, 0);   
+              //     }
+              // }
 
               function turnOnOffMessage(type, unhide) {
                   if (type == "warning" && unhide == 0) {
@@ -168,9 +184,13 @@
 
                   socket.on('message', function (msg) {
                       if (msg['id'] == "updateTrain") {
-                          var id = parseInt(msg['trainID']);
-                          var value = parseInt(msg['block']) - 1;
-                          updateTrainLocation(value % 17, id % 2);
+                          var trainID = parseInt(msg['trainID']) % 2;
+                          var block = (parseInt(msg['block']) - 1) % 17;
+                          var dist = parseFloat(msg['dist']);
+                          var blockLoc = Math.floor(dist / indexing[block]);
+                          // console.log("block:", block, "blockLoc:", blockLoc, "dist", dist);
+                          // console.log("block:", typeof(block), "blockLoc:", typeof(dist), "dist:", typeof(blockLoc));
+                          updateTrainLocation(block, blockLoc, trainID);
                       } else if (msg['id'] == "message") {
                           if (msg['value'] == "Possible train collision detected!") {
                               console.log(msg);

@@ -26,11 +26,11 @@
 
        <px-threeup id="card-1" widget-header="Multisensor" widget-icon="fa-tachometer">
           <div class="widget-1">
-              <h3>Temperature (</h3>
+              <h3>Temperature (C)</h3>
               <span>
                       
                   <px-simple-line-chart
-                      id="temperature (C)"
+                      id="temperature"
                       min="[[tempMin]]"
                       max="[[tempMax]]"
                       min-label="min [[tempMin]]"
@@ -99,19 +99,22 @@
 
               socket.on('message', function (msg) {
                   if (msg['id'] == "temperature") {
-                      globalthis.tempMin = "15";
-                      globalthis.tempMax = "35";
-                      globalthis.tempAvg = msg['mean'];
+                      var mean = msg['mean'];
+                      globalthis.tempMin = mean - 5;
+                      globalthis.tempMax = mean + 5;
+                      globalthis.tempAvg = mean;
                       globalthis.tempValue = msg['value'];
                   } else if (msg['id'] == "altitude") {
-                      globalthis.altitudeMin = "200";
-                      globalthis.altitudeMax = "250";
-                      globalthis.altitudeAvg = msg['mean'];
+                      var mean = msg['mean'];
+                      globalthis.altitudeMin = mean - 5;
+                      globalthis.altitudeMax = mean + 5;
+                      globalthis.altitudeAvg = mean;
                       globalthis.altitudeValue = msg['value'];
                   } else if (msg['id'] == "pressure") {
-                      globalthis.pressureMin = "96000";
-                      globalthis.pressureMax = "110000";
-                      globalthis.pressureAvg = msg['mean'];
+                      var mean = msg['mean'];
+                      globalthis.pressureMin = mean - 20; 
+                      globalthis.pressureMax = mean + 20;
+                      globalthis.pressureAvg = mean;
                       globalthis.pressureValue = msg['value'];
                   }
               });
