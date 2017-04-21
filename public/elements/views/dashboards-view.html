@@ -24,29 +24,6 @@
     <template>
         <px-view-header title="Dashboard" style="display: block; margin-bottom: 6px;"></px-view-header>
     
-        <!--
-        <px-alert-message
-            type="information"
-            message-title="Success!"
-            message="Trains collision avoided!"
-            auto-dismiss="5000">
-        </px-alert-message>
-
-        <px-alert-message
-            type="warning"
-            message-title="Heads up!"
-            message="Trains are about to collide!"
-            auto-dismiss="5000">
-        </px-alert-message>
-
-        <px-alert-message
-            type="error"
-            message-title="Oh no!"
-            message="The trains have collided!"
-            auto-dismiss="5000">
-        </px-alert-message>
-        -->
-
         <!-- contextIronAjax used to load data from local Predix Asset API -->
         <iron-ajax
           id="contextIronAjax"
@@ -80,7 +57,12 @@
             <div class="widget-3">
                 <h3>Total Beam Breakers Hits</h3>
                 <span>
-                    <px-simple-bar-chart width="auto" height="auto" chart-data='[[112,57,53,122,128,120,56,94,102]]'></px-simple-bar-chart>
+                    <px-simple-horizontal-bar-chart 
+                        chart-data="[5, 2, 3, 4, 2, 1, 1, 8, 9]" 
+                        bar-labels="values" 
+                        colors='["#8b2252", "#7ec0ee", "#a020f0", "#eeaeee", "#9aff9a", "#4286f4", "#f441f1", "#f441f1", "#8ef441"]' 
+                        legend-labels='["1", "2", "3", "4", "5", "6", "7", "8", "9"]'> 
+                    </px-simple-horizontal-bar-chart>
                 </span>
             </div>
         </px-threeup>

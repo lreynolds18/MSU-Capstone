@@ -4,44 +4,52 @@
 <link rel="import" href="../../bower_components/px-widget-cards/px-twoup.html">
 <link rel="import" href="../../bower_components/px-widget-cards/px-threeup.html">
 <link rel="import" href="../../bower_components/px-gauge/px-gauge.html"/>
+<link rel="import" href="/bower_components/px-alert-message/px-alert-message.html"/>
+
 
 <dom-module id="train-layout-view">
   <template>
     <px-view-header title="Train Layout" style="display: block; margin-bottom: 6px;"></px-view-header>
+    <style>
+        .hide {
+            display: none;
+        }
+    </style>
     
     <px-card header-text='Layout' icon="fa-television">
         <div class="alerts" id="alerts">
-        <!--
-        <px-alert-message
-            type="information"
-            message-title="Success!"
-            message="Trains collision avoided!"
-            auto-dismiss="5000">
-        </px-alert-message>
-
-        <px-alert-message
-            type="warning"
-            message-title="Heads up!"
-            message="Trains are about to collide!"
-            auto-dismiss="5000">
-        </px-alert-message>
-
-        <px-alert-message
-            type="error"
-            message-title="Oh no!"
-            message="The trains have collided!"
-            auto-dismiss="5000">
-        </px-alert-message>
-        -->
-
+            <px-alert-message
+                id="success"
+                class="hide"
+                type="information"
+                message-title="Success!"
+                message="Train collision avoided!">
+            </px-alert-message>
+    
+            <px-alert-message
+                id="warning"
+                class="hide"
+                type="warning"
+                message-title="Heads up!"
+                message="Trains are about to collide!">
+            </px-alert-message>
+    
+            <!--
+            <px-alert-message
+                type="error"
+                message-title="Oh no!"
+                message="The trains have collided!"
+                auto-dismiss="5000">
+            </px-alert-message>
+            -->
         </div>
+
         <div class="layout">
             <div class="layout__item style-scope local-element-demo">
                 <canvas id="train" width="1000px" height="584px;" style="border:1px solid #000000; display:block; margin:1em auto; border:1px solid black; background:url(../CurrentLayout.png); background-size: 1000px 584px;"></canvas>
             </div>
     </px-card>
 
-    <!--
     <px-twoup id="card-1" widget-header="Train Speed" widget-icon="fa-train">
          <div class="widget-1" style="resize: none; overflow: auto;">
              <h3>Train 1 Speed</h3>
@@ -57,8 +65,6 @@
              </span> 
          </div>
      </px-twoup>
-    -->
-
 
   </template>
   <script>
@@ -98,11 +104,9 @@
                 var colors = [
                               "#8B0000",
                               "#68228B",
-                              "#008B45",
                              ];
 
                 var old = [
-                           null,
                            null,
                            null,
                           ];  
@@ -126,12 +130,24 @@
 
                 var len = blocks.length;
                 for (i=0; i<len; i++) {
-                    updateTrainLocation(i, i%3);
+                    updateTrainLocation(i, i%2);
                 }
 
+                var i = 0;
+
+                function setAlertMessage(type) {
+                    if (type == "success") {
+                        this.success.classList.add("hide");
+                        setTimeout(function() {this.success.classList.remove("hide");}, 5000);
+                    } else if (type == "warning") {
+                        this.warning.classList.add("hide");
+                        setTimeout(function() {this.warning.classList.remove("hide");}, 5000);
+                    }
+                }
                 setInterval(function() {
-                    this.$.alerts.innerHTML = "</p>HELLO<p>";
-                }, 5000);
+                   setAlertMessage("success"); 
+                   setAlertMessage("warning"); 
+                }, 10000);
           }
       });
   </script>
